@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>游戏公民大会抽奖</title>
+    <link href="bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container" style="padding-top:18px;">
+        <div class="jumbotron">
+            <h1><img class="img-circle" style="padding-right:20px; width:120px;" src="huizhang.jpg" >游戏公民大会抽奖</h1>
+            <hr />
+
+            <div class="row marketing">
+                <div class="col-lg-6" style="text-align :center;">
+                    <form class="form-horizontal">
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-3 control-label" for="formGroupInputLarge">最小值</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="mymin" value="1">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-3 control-label" for="formGroupInputLarge">最大值</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="mymax">
+                            </div>
+                        </div>
+                        <div class="form-group form-group-lg">
+                            <label class="col-sm-3 control-label" for="formGroupInputLarge">中奖人数</label>
+                            <div class="col-sm-8">
+                                <input class="form-control" type="text" id="maxnumber" value="1">
+                            </div>
+                        </div>
+                    </form>
+                    <input id="buttonstart" type="button" value="引擎轰鸣！发车！" onclick="timetrick()" class="btn btn-primary btn-lg" style="width: 80%;" />
+                    <input type="button" value="买定离手！" onclick="timestop()" class="btn btn-success btn-lg" style="width: 80%; margin-top:20px;" />
+                </div>
+
+                <div class="col-lg-6">
+                    <h2 id="result">结果显示在这里</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var mytimeInterval;
+        function timetrick() {
+            document.getElementById("buttonstart").disabled=true;
+            mytimeInterval = setInterval("main()", 20);
+        }
+        function timestop() {
+            clearTimeout(mytimeInterval);
+            document.getElementById("buttonstart").disabled = false;
+        }
+        function main() {
+            var a = Math.floor(document.getElementById("mymin").value);
+            var b = Math.floor(document.getElementById("mymax").value);
+            var maxnumber = Math.floor(document.getElementById("maxnumber").value);
+            var l = [], c = 0, s = "", floor = 0;
+            if (b < a || maxnumber > b - a + 1) {
+                document.getElementById("result").innerHTML = "非法数据";
+                return;
+            }
+            while (l.length < maxnumber) {
+                c = Math.floor((b - a + 1) * Math.random()) + a;
+                if (l.indexOf(c) == -1) { l.push(c); }
+            }
+            document.getElementById("result").innerHTML = ""
+            for (var i in l) {
+                floor = Math.floor((b - l[i]) / 20) + 1
+                s = "楼层数：" + l[i] + "，估计页数：" + floor + "。</br>"
+                document.getElementById("result").innerHTML += s;
+            }            
+        }
+    </script>
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+</body>
+</html>
