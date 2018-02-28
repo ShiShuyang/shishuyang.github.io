@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AES加密解密样例</title>
+    <style>
+        textarea{
+            height:400px;
+            width:90%;
+        }
+        .inputstyle{width:400px;}
+        td{
+            text-align:center;
+        }
+        table{border-collapse: collapse;
+              border-spacing: 0;
+              table-layout: fixed;
+              width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <script type="text/javascript" src="aes_2.js"></script>
+    <h2>AES加密解密样例</h2>
+    <table border="1">
+        <tr>
+            <td>
+                <p>明文</p>
+                <textarea id="Encrypt1">苟利国家生死以</textarea>
+                <p>密钥：<input id="Encryptpwd" class="inputstyle" value="岂因祸福避趋之" /><input type="button" value="加密" onclick="Encrypt()" /></p> 
+            </td>
+            <td>
+                <p>加密结果</p>
+                <textarea id="Encrypt2" readonly ></textarea>
+                <p>&nbsp;</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p>加密文本</p>
+                <textarea id="Decrypt1"></textarea>
+                <p>密钥：<input id="Decryptpwd" class="inputstyle" /><input type="button" value="解密" onclick="Decrypt()" /></p>
+            </td>
+            <td>
+                <p>解密结果</p>
+                <textarea id="Decrypt2" readonly></textarea>
+                <p>&nbsp;</p>
+            </td>
+        </tr>
+    </table>
+    <p>说明：AES库来自https://github.com/hellobajie/AES-of-JavaScript。此处演示的加密方式为非偏移值，也无需满足密钥16位倍数之类的要求（其实我不懂这些）。
+    库中aes_2.js即为实现上述样例的脚本，aes_1.js带偏移量，可从此网页的源代码中找到样例。</p>
+    <script type="text/javascript">
+        //加密，参考http://www.jb51.net/article/89647.htm，库：https://github.com/hellobajie/AES-of-JavaScript
+        function Encrypt() {
+            var word = document.getElementById("Encrypt1").value;
+            var pwd = document.getElementById("Encryptpwd").value;
+            var result = CryptoJS.AES.encrypt(word, pwd).toString();
+            document.getElementById("Encrypt2").value = result;
+        }
+        function Decrypt() {
+            var word = document.getElementById("Decrypt1").value;
+            var pwd = document.getElementById("Decryptpwd").value;
+            var result = CryptoJS.AES.decrypt(word, pwd).toString(CryptoJS.enc.Utf8);
+            document.getElementById("Decrypt2").value = result;
+        }
+    </script>
+    
+    <script src="aes_1.js"></script>
+    <script>        
+        var key = CryptoJS.enc.Utf8.parse("十六位十六进制数作为秘钥");
+        var iv = CryptoJS.enc.Utf8.parse('十六位十六进制数作为秘钥偏移量');
+        function Encrypt2(word){
+        srcs = CryptoJS.enc.Utf8.parse(word);
+        var encrypted = CryptoJS.AES.encrypt(srcs, key, { iv: iv,mode:CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
+        return encrypted.ciphertext.toString().toUpperCase();
+        }
+        function Decrypt2(word){
+        var encryptedHexStr = CryptoJS.enc.Hex.parse(word);
+        var srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr);
+        var decrypt = CryptoJS.AES.decrypt(srcs, key, { iv: iv,mode:CryptoJS.mode.CBC,padding: CryptoJS.pad.Pkcs7});
+        var decryptedStr = decrypt.toString(CryptoJS.enc.Utf8);
+        return decryptedStr.toString();
+        }
+        var mm = Encrypt2('nihao')
+        console.log(mm);
+        var jm = Decrypt2(mm);
+        console.log(jm);
+    </script>
+</body>
+</html>
