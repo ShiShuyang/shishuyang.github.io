@@ -35,8 +35,7 @@
                             </div>
                         </div>
                     </form>
-                    <input id="buttonstart" type="button" value="引擎轰鸣！发车！" onclick="timetrick()" class="btn btn-primary btn-lg" style="width: 80%;" />
-                    <input type="button" value="买定离手！" onclick="timestop()" class="btn btn-success btn-lg" style="width: 80%; margin-top:20px;" />
+                    <input id="buttonstart" type="button" value="引擎轰鸣！发车！" onclick="timetrick()" class="btn btn-success btn-lg" style="width: 80%;" />
                 </div>
 
                 <div class="col-lg-6">
@@ -48,12 +47,14 @@
     <script>
         var mytimeInterval;
         function timetrick() {
-            document.getElementById("buttonstart").disabled=true;
-            mytimeInterval = setInterval("main()", 20);
-        }
-        function timestop() {
-            clearTimeout(mytimeInterval);
-            document.getElementById("buttonstart").disabled = false;
+            if (document.getElementById("buttonstart").value == "引擎轰鸣！发车！") {
+                document.getElementById("buttonstart").value = "停车！";
+                mytimeInterval = setInterval("main()", 20);
+            }
+            else {
+                document.getElementById("buttonstart").value = "引擎轰鸣！发车！";
+                clearTimeout(mytimeInterval);
+            }
         }
         function main() {
             var a = Math.floor(document.getElementById("mymin").value);
